@@ -1,0 +1,1809 @@
+{
+  "address": "8fVxzfLyPrATjNCcVpR2jPJAeSiJCKxwo6BLq2KrNUis",
+  "metadata": {
+    "name": "amyth_vault",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Amyth Jupiter perps vault"
+  },
+  "instructions": [
+    {
+      "name": "clear_pending_request_state",
+      "docs": [
+        "Clears local pending-request state only after the request account has been",
+        "consumed / closed on Jupiter."
+      ],
+      "discriminator": [
+        195,
+        106,
+        28,
+        48,
+        85,
+        44,
+        126,
+        101
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "vault",
+            "strategy"
+          ]
+        },
+        {
+          "name": "vault",
+          "relations": [
+            "strategy"
+          ]
+        },
+        {
+          "name": "strategy",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  106,
+                  117,
+                  112,
+                  105,
+                  116,
+                  101,
+                  114,
+                  95,
+                  115,
+                  116,
+                  114,
+                  97,
+                  116,
+                  101,
+                  103,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault"
+              },
+              {
+                "kind": "account",
+                "path": "strategy.custody",
+                "account": "JupiterStrategy"
+              },
+              {
+                "kind": "account",
+                "path": "strategy.collateral_custody",
+                "account": "JupiterStrategy"
+              },
+              {
+                "kind": "account",
+                "path": "strategy.token_mint",
+                "account": "JupiterStrategy"
+              }
+            ]
+          }
+        },
+        {
+          "name": "closed_request"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "close_pending_request",
+      "docs": [
+        "Cancels / closes a stale pending Jupiter request and returns the request ATA",
+        "funds back to the vault authority ATA through Jupiter's `closePositionRequest`."
+      ],
+      "discriminator": [
+        217,
+        27,
+        223,
+        35,
+        114,
+        124,
+        95,
+        236
+      ],
+      "accounts": [
+        {
+          "name": "relayer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "vault",
+          "relations": [
+            "strategy"
+          ]
+        },
+        {
+          "name": "strategy",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  106,
+                  117,
+                  112,
+                  105,
+                  116,
+                  101,
+                  114,
+                  95,
+                  115,
+                  116,
+                  114,
+                  97,
+                  116,
+                  101,
+                  103,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault"
+              },
+              {
+                "kind": "account",
+                "path": "strategy.custody",
+                "account": "JupiterStrategy"
+              },
+              {
+                "kind": "account",
+                "path": "strategy.collateral_custody",
+                "account": "JupiterStrategy"
+              },
+              {
+                "kind": "account",
+                "path": "strategy.token_mint",
+                "account": "JupiterStrategy"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault"
+              }
+            ]
+          }
+        },
+        {
+          "name": "jupiter_program",
+          "address": "PERPHjGBqRHArX4DySjwM6UJHiR3sWAatqfdBS2qQJu"
+        },
+        {
+          "name": "event_authority",
+          "address": "37hJBDnntwqhGbK7L6M1bLyvccj4u55CCUiLPdYkiqBN"
+        },
+        {
+          "name": "pool",
+          "address": "5BUwFW4nRbftYTDMbgxykoFWqWHPzahFSNAaaaJtVKsq"
+        },
+        {
+          "name": "vault_token_ata",
+          "writable": true
+        },
+        {
+          "name": "pending_request",
+          "writable": true
+        },
+        {
+          "name": "position_request_ata",
+          "writable": true
+        },
+        {
+          "name": "position",
+          "writable": true
+        },
+        {
+          "name": "token_program"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "deposit_collateral",
+      "docs": [
+        "Admin deposits directly into the vault authority ATA that Jupiter uses as",
+        "the funding / receiving account. No relayer or external signer can redirect",
+        "these funds because withdrawals remain admin-only and requests always use the",
+        "canonical ATA derived from the vault authority PDA."
+      ],
+      "discriminator": [
+        156,
+        131,
+        142,
+        116,
+        146,
+        247,
+        162,
+        120
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "vault",
+            "strategy"
+          ]
+        },
+        {
+          "name": "vault",
+          "relations": [
+            "strategy"
+          ]
+        },
+        {
+          "name": "strategy",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  106,
+                  117,
+                  112,
+                  105,
+                  116,
+                  101,
+                  114,
+                  95,
+                  115,
+                  116,
+                  114,
+                  97,
+                  116,
+                  101,
+                  103,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault"
+              },
+              {
+                "kind": "account",
+                "path": "strategy.custody",
+                "account": "JupiterStrategy"
+              },
+              {
+                "kind": "account",
+                "path": "strategy.collateral_custody",
+                "account": "JupiterStrategy"
+              },
+              {
+                "kind": "account",
+                "path": "strategy.token_mint",
+                "account": "JupiterStrategy"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_mint"
+        },
+        {
+          "name": "admin_token_ata",
+          "writable": true
+        },
+        {
+          "name": "vault_token_ata",
+          "writable": true
+        },
+        {
+          "name": "token_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "execute_perps_signal",
+      "docs": [
+        "Creates a Jupiter market request signed by the vault authority PDA.",
+        "The request is then fulfilled later by a keeper / relayer transaction",
+        "directly against Jupiter."
+      ],
+      "discriminator": [
+        245,
+        173,
+        195,
+        179,
+        222,
+        135,
+        133,
+        182
+      ],
+      "accounts": [
+        {
+          "name": "relayer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "vault",
+          "relations": [
+            "strategy"
+          ]
+        },
+        {
+          "name": "strategy",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  106,
+                  117,
+                  112,
+                  105,
+                  116,
+                  101,
+                  114,
+                  95,
+                  115,
+                  116,
+                  114,
+                  97,
+                  116,
+                  101,
+                  103,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault"
+              },
+              {
+                "kind": "account",
+                "path": "strategy.custody",
+                "account": "JupiterStrategy"
+              },
+              {
+                "kind": "account",
+                "path": "strategy.collateral_custody",
+                "account": "JupiterStrategy"
+              },
+              {
+                "kind": "account",
+                "path": "strategy.token_mint",
+                "account": "JupiterStrategy"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault"
+              }
+            ]
+          }
+        },
+        {
+          "name": "jupiter_program",
+          "address": "PERPHjGBqRHArX4DySjwM6UJHiR3sWAatqfdBS2qQJu"
+        },
+        {
+          "name": "event_authority",
+          "address": "37hJBDnntwqhGbK7L6M1bLyvccj4u55CCUiLPdYkiqBN"
+        },
+        {
+          "name": "pool",
+          "address": "5BUwFW4nRbftYTDMbgxykoFWqWHPzahFSNAaaaJtVKsq"
+        },
+        {
+          "name": "custody"
+        },
+        {
+          "name": "collateral_custody"
+        },
+        {
+          "name": "token_mint"
+        },
+        {
+          "name": "vault_token_ata",
+          "writable": true
+        },
+        {
+          "name": "position",
+          "writable": true
+        },
+        {
+          "name": "position_request",
+          "writable": true
+        },
+        {
+          "name": "position_request_ata",
+          "writable": true
+        },
+        {
+          "name": "exec_record",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  120,
+                  101,
+                  99,
+                  95,
+                  114,
+                  101,
+                  99,
+                  111,
+                  114,
+                  100
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "strategy"
+              },
+              {
+                "kind": "arg",
+                "path": "params.signal_nonce"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_program"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "params",
+          "type": {
+            "defined": {
+              "name": "ExecutePerpsSignalParams"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "init_jupiter_strategy",
+      "discriminator": [
+        92,
+        179,
+        74,
+        90,
+        178,
+        121,
+        227,
+        201
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "vault"
+          ]
+        },
+        {
+          "name": "vault",
+          "writable": true
+        },
+        {
+          "name": "vault_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault"
+              }
+            ]
+          }
+        },
+        {
+          "name": "strategy",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  106,
+                  117,
+                  112,
+                  105,
+                  116,
+                  101,
+                  114,
+                  95,
+                  115,
+                  116,
+                  114,
+                  97,
+                  116,
+                  101,
+                  103,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault"
+              },
+              {
+                "kind": "account",
+                "path": "custody"
+              },
+              {
+                "kind": "account",
+                "path": "collateral_custody"
+              },
+              {
+                "kind": "account",
+                "path": "token_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "jupiter_program",
+          "address": "PERPHjGBqRHArX4DySjwM6UJHiR3sWAatqfdBS2qQJu"
+        },
+        {
+          "name": "event_authority",
+          "address": "37hJBDnntwqhGbK7L6M1bLyvccj4u55CCUiLPdYkiqBN"
+        },
+        {
+          "name": "pool",
+          "address": "5BUwFW4nRbftYTDMbgxykoFWqWHPzahFSNAaaaJtVKsq"
+        },
+        {
+          "name": "custody"
+        },
+        {
+          "name": "collateral_custody"
+        },
+        {
+          "name": "token_mint"
+        },
+        {
+          "name": "vault_token_ata",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "vault_authority"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "token_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "token_program"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "params",
+          "type": {
+            "defined": {
+              "name": "InitJupiterStrategyParams"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "init_vault",
+      "discriminator": [
+        77,
+        79,
+        85,
+        150,
+        33,
+        217,
+        52,
+        106
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "admin"
+              },
+              {
+                "kind": "arg",
+                "path": "set_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "set_id",
+          "type": {
+            "array": [
+              "u8",
+              16
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "pause_vault",
+      "discriminator": [
+        250,
+        6,
+        228,
+        57,
+        6,
+        104,
+        19,
+        210
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "vault"
+          ]
+        },
+        {
+          "name": "vault",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "paused",
+          "type": "bool"
+        }
+      ]
+    },
+    {
+      "name": "set_strategy_params",
+      "discriminator": [
+        23,
+        6,
+        248,
+        81,
+        252,
+        47,
+        56,
+        152
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "vault",
+            "strategy"
+          ]
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "relations": [
+            "strategy"
+          ]
+        },
+        {
+          "name": "strategy",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  106,
+                  117,
+                  112,
+                  105,
+                  116,
+                  101,
+                  114,
+                  95,
+                  115,
+                  116,
+                  114,
+                  97,
+                  116,
+                  101,
+                  103,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault"
+              },
+              {
+                "kind": "account",
+                "path": "strategy.custody",
+                "account": "JupiterStrategy"
+              },
+              {
+                "kind": "account",
+                "path": "strategy.collateral_custody",
+                "account": "JupiterStrategy"
+              },
+              {
+                "kind": "account",
+                "path": "strategy.token_mint",
+                "account": "JupiterStrategy"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "params",
+          "type": {
+            "defined": {
+              "name": "UpdateStrategyParams"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "withdraw_collateral",
+      "docs": [
+        "Strict admin-only withdrawal from the canonical vault ATA.",
+        "Rejected while a Jupiter request is pending."
+      ],
+      "discriminator": [
+        115,
+        135,
+        168,
+        106,
+        139,
+        214,
+        138,
+        150
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "vault",
+            "strategy"
+          ]
+        },
+        {
+          "name": "vault",
+          "relations": [
+            "strategy"
+          ]
+        },
+        {
+          "name": "strategy",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  106,
+                  117,
+                  112,
+                  105,
+                  116,
+                  101,
+                  114,
+                  95,
+                  115,
+                  116,
+                  114,
+                  97,
+                  116,
+                  101,
+                  103,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault"
+              },
+              {
+                "kind": "account",
+                "path": "strategy.custody",
+                "account": "JupiterStrategy"
+              },
+              {
+                "kind": "account",
+                "path": "strategy.collateral_custody",
+                "account": "JupiterStrategy"
+              },
+              {
+                "kind": "account",
+                "path": "strategy.token_mint",
+                "account": "JupiterStrategy"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_mint"
+        },
+        {
+          "name": "vault_token_ata",
+          "writable": true
+        },
+        {
+          "name": "admin_token_ata",
+          "writable": true
+        },
+        {
+          "name": "token_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "ExecRecord",
+      "discriminator": [
+        218,
+        115,
+        50,
+        16,
+        155,
+        32,
+        156,
+        36
+      ]
+    },
+    {
+      "name": "JupiterStrategy",
+      "discriminator": [
+        73,
+        66,
+        232,
+        229,
+        21,
+        93,
+        49,
+        157
+      ]
+    },
+    {
+      "name": "Vault",
+      "discriminator": [
+        211,
+        8,
+        232,
+        43,
+        2,
+        152,
+        117,
+        119
+      ]
+    }
+  ],
+  "events": [
+    {
+      "name": "CollateralDeposited",
+      "discriminator": [
+        244,
+        62,
+        77,
+        11,
+        135,
+        112,
+        61,
+        96
+      ]
+    },
+    {
+      "name": "CollateralWithdrawn",
+      "discriminator": [
+        51,
+        224,
+        133,
+        106,
+        74,
+        173,
+        72,
+        82
+      ]
+    },
+    {
+      "name": "PendingRequestClosed",
+      "discriminator": [
+        7,
+        216,
+        231,
+        154,
+        61,
+        195,
+        187,
+        131
+      ]
+    },
+    {
+      "name": "SignalRequestCreated",
+      "discriminator": [
+        101,
+        205,
+        89,
+        117,
+        191,
+        154,
+        192,
+        124
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "VaultPaused",
+      "msg": "vault is paused"
+    },
+    {
+      "code": 6001,
+      "name": "StrategyPaused",
+      "msg": "strategy is paused"
+    },
+    {
+      "code": 6002,
+      "name": "StrategyReduceOnly",
+      "msg": "strategy is reduce only"
+    },
+    {
+      "code": 6003,
+      "name": "InvalidAmount",
+      "msg": "invalid amount"
+    },
+    {
+      "code": 6004,
+      "name": "InvalidSize",
+      "msg": "invalid size"
+    },
+    {
+      "code": 6005,
+      "name": "InvalidCooldown",
+      "msg": "invalid cooldown"
+    },
+    {
+      "code": 6006,
+      "name": "InvalidPriceSlippage",
+      "msg": "invalid price slippage"
+    },
+    {
+      "code": 6007,
+      "name": "CooldownActive",
+      "msg": "cooldown active"
+    },
+    {
+      "code": 6008,
+      "name": "Replay",
+      "msg": "replay detected"
+    },
+    {
+      "code": 6009,
+      "name": "UnauthorizedRelayer",
+      "msg": "unauthorized relayer"
+    },
+    {
+      "code": 6010,
+      "name": "WrongTokenProgram",
+      "msg": "wrong token program"
+    },
+    {
+      "code": 6011,
+      "name": "WrongJupiterProgram",
+      "msg": "wrong Jupiter perps program"
+    },
+    {
+      "code": 6012,
+      "name": "WrongJupiterEventAuthority",
+      "msg": "wrong Jupiter event authority"
+    },
+    {
+      "code": 6013,
+      "name": "WrongJupiterPool",
+      "msg": "wrong JLP pool"
+    },
+    {
+      "code": 6014,
+      "name": "WrongCustody",
+      "msg": "wrong custody"
+    },
+    {
+      "code": 6015,
+      "name": "WrongCollateralCustody",
+      "msg": "wrong collateral custody"
+    },
+    {
+      "code": 6016,
+      "name": "WrongTokenMint",
+      "msg": "wrong token mint"
+    },
+    {
+      "code": 6017,
+      "name": "BadVaultAta",
+      "msg": "vault token account must be the canonical ATA for the vault authority"
+    },
+    {
+      "code": 6018,
+      "name": "BadAdminAta",
+      "msg": "admin token account must be the canonical ATA for the admin"
+    },
+    {
+      "code": 6019,
+      "name": "BadAdminAtaOwner",
+      "msg": "bad admin ATA owner"
+    },
+    {
+      "code": 6020,
+      "name": "BadAdminAtaMint",
+      "msg": "bad admin ATA mint"
+    },
+    {
+      "code": 6021,
+      "name": "BadPositionRequestAta",
+      "msg": "bad position request ATA"
+    },
+    {
+      "code": 6022,
+      "name": "UnsupportedMarketConfig",
+      "msg": "unsupported Jupiter market configuration"
+    },
+    {
+      "code": 6023,
+      "name": "RequestPending",
+      "msg": "request already pending"
+    },
+    {
+      "code": 6024,
+      "name": "NoPendingRequest",
+      "msg": "no pending request"
+    },
+    {
+      "code": 6025,
+      "name": "RequestStillOpen",
+      "msg": "the pending request account is still open on Jupiter"
+    },
+    {
+      "code": 6026,
+      "name": "WrongPositionPda",
+      "msg": "wrong position PDA"
+    },
+    {
+      "code": 6027,
+      "name": "WrongPositionRequestPda",
+      "msg": "wrong position request PDA"
+    },
+    {
+      "code": 6028,
+      "name": "SizeTooHigh",
+      "msg": "requested size exceeds strategy cap"
+    },
+    {
+      "code": 6029,
+      "name": "PriceSlippageTooHigh",
+      "msg": "requested price slippage exceeds strategy cap"
+    },
+    {
+      "code": 6030,
+      "name": "MathOverflow",
+      "msg": "math overflow"
+    }
+  ],
+  "types": [
+    {
+      "name": "CollateralDeposited",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "strategy",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CollateralWithdrawn",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "strategy",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ExecRecord",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "strategy",
+            "type": "pubkey"
+          },
+          {
+            "name": "signal_nonce",
+            "type": "u64"
+          },
+          {
+            "name": "executed_at",
+            "type": "i64"
+          },
+          {
+            "name": "request",
+            "type": "pubkey"
+          },
+          {
+            "name": "action",
+            "type": {
+              "defined": {
+                "name": "SignalAction"
+              }
+            }
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ExecutePerpsSignalParams",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "signal_nonce",
+            "type": "u64"
+          },
+          {
+            "name": "action",
+            "type": {
+              "defined": {
+                "name": "SignalAction"
+              }
+            }
+          },
+          {
+            "name": "size_usd_delta",
+            "type": "u64"
+          },
+          {
+            "name": "collateral_token_delta",
+            "type": "u64"
+          },
+          {
+            "name": "price_slippage",
+            "type": "u64"
+          },
+          {
+            "name": "entire_position",
+            "type": "bool"
+          }
+        ]
+      }
+    },
+    {
+      "name": "InitJupiterStrategyParams",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authorized_relayer",
+            "type": "pubkey"
+          },
+          {
+            "name": "side",
+            "type": {
+              "defined": {
+                "name": "JupiterSide"
+              }
+            }
+          },
+          {
+            "name": "max_open_size_usd",
+            "type": "u64"
+          },
+          {
+            "name": "max_price_slippage",
+            "type": "u64"
+          },
+          {
+            "name": "cooldown_secs",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "JupiterSide",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Long"
+          },
+          {
+            "name": "Short"
+          }
+        ]
+      }
+    },
+    {
+      "name": "JupiterStrategy",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "admin",
+            "type": "pubkey"
+          },
+          {
+            "name": "authorized_relayer",
+            "type": "pubkey"
+          },
+          {
+            "name": "jupiter_program",
+            "type": "pubkey"
+          },
+          {
+            "name": "event_authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "pool",
+            "type": "pubkey"
+          },
+          {
+            "name": "custody",
+            "type": "pubkey"
+          },
+          {
+            "name": "collateral_custody",
+            "type": "pubkey"
+          },
+          {
+            "name": "token_mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "vault_token_ata",
+            "type": "pubkey"
+          },
+          {
+            "name": "side",
+            "type": {
+              "defined": {
+                "name": "JupiterSide"
+              }
+            }
+          },
+          {
+            "name": "max_open_size_usd",
+            "type": "u64"
+          },
+          {
+            "name": "max_price_slippage",
+            "type": "u64"
+          },
+          {
+            "name": "cooldown_secs",
+            "type": "i64"
+          },
+          {
+            "name": "last_exec_ts",
+            "type": "i64"
+          },
+          {
+            "name": "last_signal_nonce",
+            "type": "u64"
+          },
+          {
+            "name": "pending_request",
+            "type": "pubkey"
+          },
+          {
+            "name": "pending_request_change",
+            "type": {
+              "defined": {
+                "name": "RequestChange"
+              }
+            }
+          },
+          {
+            "name": "paused",
+            "type": "bool"
+          },
+          {
+            "name": "reduce_only",
+            "type": "bool"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PendingRequestClosed",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "strategy",
+            "type": "pubkey"
+          },
+          {
+            "name": "request",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "RequestChange",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "None"
+          },
+          {
+            "name": "Increase"
+          },
+          {
+            "name": "Decrease"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SignalAction",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Open"
+          },
+          {
+            "name": "Close"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SignalRequestCreated",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "strategy",
+            "type": "pubkey"
+          },
+          {
+            "name": "signal_nonce",
+            "type": "u64"
+          },
+          {
+            "name": "action",
+            "type": {
+              "defined": {
+                "name": "SignalAction"
+              }
+            }
+          },
+          {
+            "name": "request",
+            "type": "pubkey"
+          },
+          {
+            "name": "size_usd_delta",
+            "type": "u64"
+          },
+          {
+            "name": "collateral_token_delta",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UpdateStrategyParams",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authorized_relayer",
+            "type": {
+              "option": "pubkey"
+            }
+          },
+          {
+            "name": "max_open_size_usd",
+            "type": {
+              "option": "u64"
+            }
+          },
+          {
+            "name": "max_price_slippage",
+            "type": {
+              "option": "u64"
+            }
+          },
+          {
+            "name": "cooldown_secs",
+            "type": {
+              "option": "i64"
+            }
+          },
+          {
+            "name": "reduce_only",
+            "type": {
+              "option": "bool"
+            }
+          },
+          {
+            "name": "paused",
+            "type": {
+              "option": "bool"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Vault",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "admin",
+            "type": "pubkey"
+          },
+          {
+            "name": "set_id",
+            "type": {
+              "array": [
+                "u8",
+                16
+              ]
+            }
+          },
+          {
+            "name": "paused",
+            "type": "bool"
+          },
+          {
+            "name": "vault_bump",
+            "type": "u8"
+          },
+          {
+            "name": "vault_authority_bump",
+            "type": "u8"
+          },
+          {
+            "name": "created_at",
+            "type": "i64"
+          }
+        ]
+      }
+    }
+  ]
+}

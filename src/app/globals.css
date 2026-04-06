@@ -1,0 +1,216 @@
+@import "@solana/wallet-adapter-react-ui/styles.css";
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --amyth-amethyst: #541FF3;
+  --amyth-violet: #7C3AEE;
+  --amyth-lavender: #C2B6F7;
+  --amyth-mint: #1BFDB2;
+  --amyth-background: #191919;
+  --amyth-charcoal: #FBF8FA;
+  --amyth-surface: #221D2B;
+  --amyth-surface-soft: #2A2336;
+  --amyth-stroke: #332B41;
+  --amyth-muted: #AAA0C7;
+  --amyth-soft: #DED8EF;
+  --brand-gradient: linear-gradient(90deg, #541FF3 0%, #1BFDB2 100%);
+}
+
+html {
+  background: var(--amyth-background);
+  color-scheme: dark;
+}
+
+body {
+  font-family: var(--font-inter), system-ui, sans-serif;
+  margin: 0;
+  padding: 0;
+  background:
+    radial-gradient(circle at 18% 14%, rgba(84, 31, 243, 0.18) 0%, transparent 32%),
+    radial-gradient(circle at 82% 0%, rgba(27, 253, 178, 0.08) 0%, transparent 24%),
+    radial-gradient(circle at 50% 0%, rgba(124, 58, 238, 0.14) 0%, transparent 38%),
+    var(--amyth-background);
+  color: var(--amyth-charcoal);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::selection {
+  background: rgba(124, 58, 238, 0.28);
+  color: var(--amyth-charcoal);
+}
+
+.am-full-bleed {
+  position: relative;
+  width: 100vw;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  overflow-x: clip;
+}
+@supports (width: 100svw) {
+  .am-full-bleed {
+    width: 100svw;
+    left: auto;
+    right: auto;
+    margin-left: calc(50% - 50svw);
+    margin-right: calc(50% - 50svw);
+  }
+}
+@supports not (overflow-x: clip) {
+  .am-full-bleed { overflow-x: hidden; }
+}
+
+.text-crystal {
+  background-image: linear-gradient(90deg, #FBF8FA 0%, #C2B6F7 28%, #7C3AEE 62%, #1BFDB2 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: crystalTextShift 8s ease-in-out infinite;
+}
+
+@keyframes crystalTextShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.glass-facet {
+  background:
+    linear-gradient(180deg, rgba(34,29,43,0.9) 0%, rgba(26,22,33,0.96) 100%);
+  backdrop-filter: blur(20px) saturate(1.05);
+  -webkit-backdrop-filter: blur(20px) saturate(1.05);
+  border: 1px solid rgba(51, 43, 65, 0.96);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.03),
+    0 22px 60px -30px rgba(84, 31, 243, 0.30);
+}
+
+.glass-facet:hover {
+  border-color: rgba(124, 58, 238, 0.54);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    0 26px 70px -32px rgba(84, 31, 243, 0.38);
+}
+
+.noise-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.018'/%3E%3C/svg%3E");
+  background-size: 128px 128px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.btn-amyth {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.5rem;
+  font-family: var(--font-sora), system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 0.875rem;
+  letter-spacing: 0.01em;
+  color: #FBF8FA;
+  background: #541FF3;
+  border: 1px solid rgba(194, 182, 247, 0.18);
+  border-radius: 0.95rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 16px 40px -18px rgba(84, 31, 243, 0.55);
+}
+.btn-amyth:hover {
+  box-shadow: 0 22px 52px -20px rgba(84, 31, 243, 0.6);
+  transform: translateY(-1px);
+  background: #4B18E8;
+}
+.btn-amyth:active {
+  transform: translateY(0px);
+}
+
+.surface-panel {
+  border: 1px solid rgba(51, 43, 65, 0.96);
+  background:
+    linear-gradient(180deg, rgba(34,29,43,0.92) 0%, rgba(24,20,30,0.97) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.03),
+    0 22px 60px -32px rgba(84,31,243,0.34);
+}
+
+.hero-grid {
+  background-image:
+    linear-gradient(rgba(194, 182, 247, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(194, 182, 247, 0.05) 1px, transparent 1px);
+  background-size: 72px 72px;
+}
+
+.hero-orb {
+  border-radius: 9999px;
+  filter: blur(68px);
+  position: absolute;
+  pointer-events: none;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(34, 29, 43, 0.95);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(124, 58, 238, 0.44);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(84, 31, 243, 0.56);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .text-crystal {
+    animation: none;
+    background-position: 0% 50%;
+  }
+}
+
+.wallet-adapter-modal-wrapper {
+  background: rgba(25, 25, 25, 0.98) !important;
+  border: 1px solid rgba(51, 43, 65, 0.96) !important;
+  backdrop-filter: blur(22px) !important;
+}
+
+.wallet-adapter-modal-title,
+.wallet-adapter-modal-list .wallet-adapter-button,
+.wallet-adapter-modal-list-more,
+.wallet-adapter-dropdown-list,
+.wallet-adapter-dropdown-list-item {
+  color: #FBF8FA !important;
+}
+
+.wallet-adapter-modal-list .wallet-adapter-button,
+.wallet-adapter-dropdown-list {
+  background: rgba(34, 29, 43, 0.95) !important;
+  border: 1px solid rgba(51, 43, 65, 0.96) !important;
+}
+
+.wallet-adapter-button {
+  background: #541FF3 !important;
+  color: #FBF8FA !important;
+  font-family: var(--font-sora), system-ui, sans-serif !important;
+}
+
+.wallet-adapter-button:hover {
+  background: #4B18E8 !important;
+  filter: none;
+}
